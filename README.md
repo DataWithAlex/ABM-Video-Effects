@@ -26,16 +26,7 @@ This project implements video frame extraction, distortion effects, and video re
 
 The project is organized as follows:
 
-/ABM
-    ├── src/
-        ├── abm_model.jl      # Agent-Based Modeling (ABM) code
-        ├── distortion.jl     # Distortion effects logic
-        ├── filehandler.jl    # Video I/O functions (frame extraction, video reassembly)
-        ├── utils.jl          # Utility functions for frame manipulation
-    ├── id_rsa
-    ├── id_rsa.pub
-    └── README.md
-
+```
 ├── ABM/
 │   ├── src/
 │   │   ├── abm_model.jl      # Agent-Based Modeling (ABM) code
@@ -53,13 +44,4 @@ The project is organized as follows:
 ├── Project.toml              # Project dependencies
 ├── Manifest.toml             # Dependency versions and environment settings
 └── README.md                 # This README file
-
-.
-├── ...
-├── src/                    # Documentation files (alternatively `doc`)
-│   ├── abm_model.jl        # Agent-Based Modeling (ABM) code
-│   ├── distortion.jl       # Distortion effects logic
-│   ├── filehandler.jl      # Video I/O functions (frame extraction, video reassembly)
-│   ├── utils.jl            # Utility functions for frame manipulation
-│   └── ...                 # etc.
-└── ...
+```
