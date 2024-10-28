@@ -1,0 +1,2 @@
+streamlit==1.27.2
+julia==0.5.8
