@@ -12,7 +12,7 @@ WORKDIR /app
 COPY . /app
 
 # Install any required Julia packages
-RUN julia --project=. -e 'using Pkg; Pkg.instantiate()'
+RUN julia --project=. -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
 
 # Expose the port that Genie uses
 EXPOSE 8080
