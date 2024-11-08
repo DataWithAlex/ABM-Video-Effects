@@ -4,7 +4,7 @@ using Genie.Renderer.Json
 using VideoIO
 using Images
 using Logging
-using AWSS3  # Make sure AWSS3.jl is installed
+using AWSS3  # Ensure AWSS3.jl is installed and this import is included
 
 # Configure logging
 Logging.global_logger(SimpleLogger(stderr, Logging.Debug))
@@ -38,7 +38,7 @@ route("/process_video", method = POST) do
             @info "Downloading video from S3 key: $s3_key to local path: $video_path"
 
             # Download the file from S3
-            AWS.download_s3_object(BUCKET_NAME, s3_key, video_path)
+            s3_get_object(BUCKET_NAME, s3_key, video_path)
         else
             video_path = abspath(payload["video_path"])
         end
