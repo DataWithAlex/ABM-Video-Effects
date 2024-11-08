@@ -4,6 +4,7 @@ using Genie.Renderer.Json
 using VideoIO
 using Images
 using Logging
+using AWSS3  # Make sure AWSS3.jl is installed
 
 # Configure logging
 Logging.global_logger(SimpleLogger(stderr, Logging.Debug))
@@ -16,6 +17,9 @@ include("distortion.jl")
 using .FileHandler
 using .Distortion
 
+# Define the S3 bucket
+const BUCKET_NAME = "abvdm-video-bucket"
+
 # Define the route for the API root
 route("/") do
     @info "Root route accessed"
@@ -25,10 +29,20 @@ end
 # Define the route for processing videos
 route("/process_video", method = POST) do
     @info "Video processing route accessed"
-
     try
-        # Retrieve and validate the video path from the request payload
-        video_path = abspath(Genie.Requests.jsonpayload()["video_path"])
+        # Check if S3 key is provided
+        payload = Genie.Requests.jsonpayload()
+        if haskey(payload, "s3_key")
+            s3_key = payload["s3_key"]
+            video_path = abspath("output/temp_uploaded_video.mp4")
+            @info "Downloading video from S3 key: $s3_key to local path: $video_path"
+
+            # Download the file from S3
+            AWS.download_s3_object(BUCKET_NAME, s3_key, video_path)
+        else
+            video_path = abspath(payload["video_path"])
+        end
+
         output_path = abspath("output/distorted_clip1.mp4")
         output_frames_folder = abspath("output/distorted_frames/")
         fps = 30
