@@ -5,6 +5,7 @@ using VideoIO
 using Images
 using Logging
 using AWSS3  # Ensure AWSS3.jl is installed and this import is included
+using AWS    # To initialize AWS config if needed
 
 # Configure logging
 Logging.global_logger(SimpleLogger(stderr, Logging.Debug))
@@ -19,6 +20,14 @@ using .Distortion
 
 # Define the S3 bucket
 const BUCKET_NAME = "abvdm-video-bucket"
+
+# Initialize the AWS configuration (modify region as necessary)
+const aws_config = global_aws_config(region = "us-east-2")
+
+# Helper function to download from S3
+function download_from_s3(bucket::String, key::String, local_path::String)
+    s3_get_file(aws_config, bucket, key, local_path)
+end
 
 # Define the route for the API root
 route("/") do
@@ -38,7 +47,7 @@ route("/process_video", method = POST) do
             @info "Downloading video from S3 key: $s3_key to local path: $video_path"
 
             # Download the file from S3
-            s3_get_object(BUCKET_NAME, s3_key, video_path)
+            download_from_s3(BUCKET_NAME, s3_key, video_path)
         else
             video_path = abspath(payload["video_path"])
         end
